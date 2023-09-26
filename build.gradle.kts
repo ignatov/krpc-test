@@ -22,6 +22,7 @@ dependencies {
 
     implementation("org.jetbrains.krpc:krpc-runtime:1.9.10-beta-1")
     implementation("org.jetbrains.krpc:krpc-runtime-client:1.9.10-beta-1")
+    implementation("org.jetbrains.krpc:krpc-runtime-server:1.9.10-beta-1")
     implementation(kotlin("test-junit"))
     testImplementation("org.jetbrains.krpc:krpc-runtime-test:1.9.10-beta-1")
 }

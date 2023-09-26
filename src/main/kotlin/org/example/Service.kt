@@ -4,12 +4,15 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.jetbrains.krpc.RPC
 import org.jetbrains.krpc.RPCMessage
 import org.jetbrains.krpc.RPCTransport
 import org.jetbrains.krpc.client.rpcServiceOf
+import org.jetbrains.krpc.server.RPCServer
+import org.jetbrains.krpc.server.rpcServerOf
 import kotlin.coroutines.CoroutineContext
 
 @Serializable
@@ -39,7 +42,7 @@ class ImageRecognizerService : ImageRecognizer {
     }
 }
 
-class Transport: RPCTransport {
+class Transport : RPCTransport {
     override val coroutineContext: CoroutineContext = Job()
 
     override suspend fun send(message: RPCMessage) {
@@ -51,10 +54,22 @@ class Transport: RPCTransport {
 }
 
 fun main() {
-    val transport = Transport()
-    val service: ImageRecognizer = rpcServiceOf<ImageRecognizer>(transport)
+    val transport: StringTransport = StringTransport()
 
     runBlocking {
-        service.recognize(Image(byteArrayOf(0)))
+
+        launch {
+            val backendService = ImageRecognizerService()
+            val rpcServer: RPCServer<ImageRecognizer> = rpcServerOf<ImageRecognizer>(backendService, transport.server)
+            rpcServer.run()
+        }
+
+
+        launch {
+            val service: ImageRecognizer = rpcServiceOf<ImageRecognizer>(transport.client)
+            val result = service.recognize(Image(byteArrayOf(0)))
+            println("Result: $result")
+        }
+
     }
 }
