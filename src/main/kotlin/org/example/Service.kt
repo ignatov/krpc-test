@@ -52,7 +52,7 @@ class Transport: RPCTransport {
 
 fun main() {
     val transport = Transport()
-    val service: ImageRecognizerService = rpcServiceOf<ImageRecognizerService>(transport)
+    val service: ImageRecognizer = rpcServiceOf<ImageRecognizer>(transport)
 
     runBlocking {
         service.recognize(Image(byteArrayOf(0)))
