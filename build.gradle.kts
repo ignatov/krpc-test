@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.plugin.PLUGIN_CLASSPATH_CONFIGURATION_NAME
 
 
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "1.9.10"
     kotlin("plugin.serialization") version "1.9.10"
     id("com.google.devtools.ksp") version "1.9.10-1.0.13"
 }
